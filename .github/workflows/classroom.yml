@@ -1,0 +1,90 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: testMaxTwoInList
+      id: testmaxtwoinlist
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testMaxTwoInList
+        setup-command: pip install pytest
+        command: pytest test_assignment2.py::test_max_two_in_list
+        timeout: 1
+        max-score: 10
+    - name: testRemoveDuplicatedAndSort
+      id: testremoveduplicatedandsort
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testRemoveDuplicatedAndSort
+        setup-command: pip install pytest
+        command: pytest test_assignment2.py::test_remove_duplicates_and_sort
+        timeout: 1
+        max-score: 10
+    - name: testCumulativeSum
+      id: testcumulativesum
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testCumulativeSum
+        setup-command: pip install pytest
+        command: pytest test_assignment2.py::test_cumulative_sum
+        timeout: 1
+        max-score: 10
+    - name: testTransposeMatrix
+      id: testtransposematrix
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testTransposeMatrix
+        setup-command: pip install pytest
+        command: pytest test_assignment2.py::test_transpose_matrix
+        timeout: 1
+        max-score: 15
+    - name: testSliceEveryNth
+      id: testsliceeverynth
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testSliceEveryNth
+        setup-command: pip install pytest
+        command: pytest test_assignment2.py::test_slice_every_nth
+        timeout: 1
+        max-score: 15
+    - name: testDotProduct
+      id: testdotproduct
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testDotProduct
+        setup-command: pip install pytest
+        command: pytest test_assignment2.py::test_dot_product
+        timeout: 1
+        max-score: 20
+    - name: testMatrixMultiplication
+      id: testmatrixmultiplication
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testMatrixMultiplication
+        setup-command: pip install pytest
+        command: pytest test_assignment2.py::test_matrix_multiplication
+        timeout: 1
+        max-score: 20
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TESTMAXTWOINLIST_RESULTS: "${{steps.testmaxtwoinlist.outputs.result}}"
+        TESTREMOVEDUPLICATEDANDSORT_RESULTS: "${{steps.testremoveduplicatedandsort.outputs.result}}"
+        TESTCUMULATIVESUM_RESULTS: "${{steps.testcumulativesum.outputs.result}}"
+        TESTTRANSPOSEMATRIX_RESULTS: "${{steps.testtransposematrix.outputs.result}}"
+        TESTSLICEEVERYNTH_RESULTS: "${{steps.testsliceeverynth.outputs.result}}"
+        TESTDOTPRODUCT_RESULTS: "${{steps.testdotproduct.outputs.result}}"
+        TESTMATRIXMULTIPLICATION_RESULTS: "${{steps.testmatrixmultiplication.outputs.result}}"
+      with:
+        runners: testmaxtwoinlist,testremoveduplicatedandsort,testcumulativesum,testtransposematrix,testsliceeverynth,testdotproduct,testmatrixmultiplication
